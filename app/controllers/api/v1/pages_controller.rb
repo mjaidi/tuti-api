@@ -1,7 +1,7 @@
 class Api::V1::PagesController < Api::V1::BaseController
   before_action :verify_login
   def main
-   render json: {user: current_user}
+   render json: {message: "This message is brought to you by the server"}
   end
 
   private
