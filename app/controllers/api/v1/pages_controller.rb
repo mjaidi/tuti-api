@@ -1,14 +1,11 @@
 class Api::V1::PagesController < Api::V1::BaseController
-  before_action :verify_login
   def main
-   render json: {message: "This message is brought to you by the server"}
+    authorize :pages, :main?
+    render json: {message: "This message is brought to you by the server this page can be accessed by all users"}
   end
 
-  private
-
-  def verify_login
-    unless current_user
-      render json: {error: 'please login to continue'}, status: :not_found
-    end
+  def admin_page
+    authorize :pages, :admin_page?
+    render json: {message: 'Welcome Admin'}
   end
 end
