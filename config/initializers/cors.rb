@@ -15,13 +15,13 @@
 #   end
 # end
 
-Rails.application.config.middleware.insert_before 0, Rack::Cors do
+Rails.application.config.middleware.insert_before 0, Rack::Cors, :debug => true, :logger => (-> { Rails.logger }) do
   allow do
-    origins '*'
+    origins /\Ahttp:\/\/localhost:\d+\z/
     resource '/*',
-      headers: %w(Authorization),
+      headers: :any,
       methods: :any,
-      expose: %w(Authorization),
+      expose: ['Authorization'],
       max_age: 600
-  end
+    end
 end

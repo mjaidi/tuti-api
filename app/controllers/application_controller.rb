@@ -3,12 +3,13 @@ class ApplicationController < ActionController::API
     if resource.errors.empty?
       render json: resource
     else
-      validation_error(resource)
+       validation_error(resource)
     end
   end
 
   def validation_error(resource)
     render json: {
+      error: resource.errors.first,
       errors: [
         {
           status: '400',
