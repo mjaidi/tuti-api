@@ -1,8 +1,8 @@
 class PagesPolicy < Struct.new(:user, :pages)
-  def main?
+  def secret?
     user
   end
-  def admin_page?
+  def admin?
     user.role == 'admin'
   end
 end

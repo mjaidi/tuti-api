@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::BaseController < ActionController::Base
   include Pundit
   protect_from_forgery with: :exception
@@ -24,7 +26,7 @@ class Api::V1::BaseController < ActionController::Base
     if Rails.env.development?
       response = { type: exception.class.to_s, message: exception.message, backtrace: exception.backtrace }
     else
-      response = { error: "Internal Server Error" }
+      response = { error: 'Internal Server Error' }
     end
     render json: response, status: :internal_server_error
   end
