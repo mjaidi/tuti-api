@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+  authenticate :user, ->(u) { u.admin } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   devise_for :users,
              path: '',
              path_names: {
@@ -10,8 +15,10 @@ Rails.application.routes.draw do
              },
              controllers: {
                sessions: 'sessions',
-               registrations: 'registrations'
-             }
+               registrations: 'registrations',
+               passwords: 'passwords'
+             },
+             defaults: { format: :json }
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::BaseController < ActionController::Base
+class Api::V1::BaseController < ActionController::API
   include Pundit
   protect_from_forgery with: :exception
   after_action :verify_authorized, except: :index
