@@ -2,6 +2,7 @@
 
 class Api::V1::BaseController < ActionController::API
   include Pundit
+  include ActionController::RequestForgeryProtection
   protect_from_forgery with: :exception
   after_action :verify_authorized, except: :index
   after_action :verify_policy_scoped, only: :index
