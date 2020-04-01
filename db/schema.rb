@@ -10,10 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_31_104801) do
+ActiveRecord::Schema.define(version: 2020_03_31_145926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cards", force: :cascade do |t|
+    t.string "name"
+    t.string "suit"
+    t.integer "score"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "game_players", force: :cascade do |t|
+    t.bigint "game_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "play_order"
+    t.jsonb "player_cards"
+    t.jsonb "current_cards"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_id"], name: "index_game_players_on_game_id"
+    t.index ["user_id"], name: "index_game_players_on_user_id"
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.integer "number_players"
+    t.jsonb "initial_deck"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "jwt_blacklist", id: :serial, force: :cascade do |t|
     t.string "jti", null: false
@@ -23,6 +50,24 @@ ActiveRecord::Schema.define(version: 2020_01_31_104801) do
   create_table "jwt_blacklists", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "moves", force: :cascade do |t|
+    t.bigint "round_id", null: false
+    t.bigint "game_player_id", null: false
+    t.bigint "card_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["card_id"], name: "index_moves_on_card_id"
+    t.index ["game_player_id"], name: "index_moves_on_game_player_id"
+    t.index ["round_id"], name: "index_moves_on_round_id"
+  end
+
+  create_table "rounds", force: :cascade do |t|
+    t.bigint "game_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["game_id"], name: "index_rounds_on_game_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -38,4 +83,10 @@ ActiveRecord::Schema.define(version: 2020_01_31_104801) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "game_players", "games"
+  add_foreign_key "game_players", "users"
+  add_foreign_key "moves", "cards"
+  add_foreign_key "moves", "game_players"
+  add_foreign_key "moves", "rounds"
+  add_foreign_key "rounds", "games"
 end
