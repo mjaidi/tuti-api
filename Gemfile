@@ -12,7 +12,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
 gem 'devise'
 gem 'devise-jwt'
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 4.3'
 gem 'pundit'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
